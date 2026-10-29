@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Glop Vender</title>
+<!--
+  Glop Vender loading screen (made by Claude).
+  Written in old-school HTML/CSS/JS on purpose: Garry's Mod's default loading-screen browser is very old,
+  so no modern CSS variables / flexbox / arrow functions are used.
+  EDIT: the text in the CONFIG block near the bottom (title, subtitle, tips).
+-->
+<style>
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #0e1018; font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #ebeef5; }
+
+/* soft colour pools in the background */
+.pool { position: absolute; border-radius: 50%; opacity: .18; }
+#pool1 { width: 900px; height: 900px; left: -300px; top: -350px; background: #3ce6c8; background: -webkit-radial-gradient(center, circle, rgba(60,230,200,1) 0%, rgba(60,230,200,0) 70%); background: radial-gradient(circle at center, rgba(60,230,200,1) 0%, rgba(60,230,200,0) 70%); opacity: .35; -webkit-animation: drift1 26s ease-in-out infinite alternate; animation: drift1 26s ease-in-out infinite alternate; }
+#pool2 { width: 800px; height: 800px; right: -300px; bottom: -350px; background: #ff528c; background: -webkit-radial-gradient(center, circle, rgba(255,82,140,1) 0%, rgba(255,82,140,0) 70%); background: radial-gradient(circle at center, rgba(255,82,140,1) 0%, rgba(255,82,140,0) 70%); opacity: .25; -webkit-animation: drift2 30s ease-in-out infinite alternate; animation: drift2 30s ease-in-out infinite alternate; }
+@-webkit-keyframes drift1 { from { -webkit-transform: translate(0,0); } to { -webkit-transform: translate(160px,120px); } }
+@-webkit-keyframes drift2 { from { -webkit-transform: translate(0,0); } to { -webkit-transform: translate(-140px,-100px); } }
+@keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(160px,120px); } }
+@keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-140px,-100px); } }
+#veil { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: rgba(14,16,24,.72); }
+
+/* floating "stickers" drawn with CSS */
+#stickers { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; }
+.st { position: absolute; opacity: .17; -webkit-animation-name: floatUp; -webkit-animation-timing-function: linear; -webkit-animation-iteration-count: infinite;
+      animation-name: floatUp; animation-timing-function: linear; animation-iteration-count: infinite; }
+@-webkit-keyframes floatUp { from { -webkit-transform: translateY(0) rotate(0deg); } to { -webkit-transform: translateY(-130vh) rotate(40deg); } }
+@keyframes floatUp { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-130vh) rotate(40deg); } }
+
+.vend { width: 38px; height: 62px; border: 3px solid #3ce6c8; border-radius: 7px; position: relative; }
+.vend:before { content: ""; position: absolute; left: 5px; top: 6px; width: 18px; height: 30px; border: 2px solid #3ce6c8; border-radius: 3px; }
+.vend:after { content: ""; position: absolute; left: 5px; bottom: 6px; width: 24px; height: 7px; background: #3ce6c8; border-radius: 2px; }
+.crate { width: 50px; height: 40px; border: 3px solid #ffc83c; border-radius: 5px; position: relative; }
+.crate:before { content: ""; position: absolute; left: 0; right: 0; top: 11px; height: 3px; background: #ffc83c; }
+.crate:after { content: ""; position: absolute; left: 20px; top: 8px; width: 9px; height: 9px; background: #ffc83c; border-radius: 2px; }
+.coin { width: 34px; height: 34px; border: 3px solid #ffc83c; border-radius: 50%; position: relative; }
+.coin:after { content: ""; position: absolute; left: 10px; top: 10px; width: 14px; height: 14px; border: 2px solid #ffc83c; border-radius: 50%; }
+.key { width: 22px; height: 22px; border: 3px solid #e58cff; border-radius: 50%; position: relative; }
+.key:after { content: ""; position: absolute; left: 22px; top: 8px; width: 34px; height: 4px; background: #e58cff; border-right: 6px solid #e58cff; }
+.blade { width: 8px; height: 70px; background: #ff528c; border-radius: 6px 6px 2px 2px; position: relative; }
+.blade:after { content: ""; position: absolute; left: -6px; bottom: -4px; width: 20px; height: 5px; background: #ff528c; border-radius: 2px; }
+
+/* centre card */
+#card { position: absolute; left: 50%; top: 50%; width: 760px; margin-left: -380px; margin-top: -210px; text-align: center; }
+#title { font-size: 86px; font-weight: 900; letter-spacing: 6px; text-transform: uppercase; color: #ebeef5; text-shadow: 0 0 24px rgba(60,230,200,.55), 0 4px 0 rgba(0,0,0,.5);
+         -webkit-animation: glow 4s ease-in-out infinite alternate; animation: glow 4s ease-in-out infinite alternate; }
+@-webkit-keyframes glow { from { text-shadow: 0 0 18px rgba(60,230,200,.35), 0 4px 0 rgba(0,0,0,.5); } to { text-shadow: 0 0 34px rgba(60,230,200,.8), 0 4px 0 rgba(0,0,0,.5); } }
+@keyframes glow { from { text-shadow: 0 0 18px rgba(60,230,200,.35), 0 4px 0 rgba(0,0,0,.5); } to { text-shadow: 0 0 34px rgba(60,230,200,.8), 0 4px 0 rgba(0,0,0,.5); } }
+#accent { width: 120px; height: 4px; margin: 6px auto 18px auto; background: #3ce6c8; border-radius: 2px; box-shadow: 0 0 12px #3ce6c8; }
+#subtitle { font-size: 22px; color: #8c94a5; letter-spacing: 1px; }
+#info { margin-top: 26px; }
+.pill { display: inline-block; margin: 0 5px; padding: 7px 16px; border-radius: 16px; background: rgba(26,29,40,.92); border: 1px solid rgba(255,255,255,.08); font-size: 15px; font-weight: 600; color: #ebeef5; }
+.pill b { color: #3ce6c8; font-weight: 700; }
+
+#barwrap { margin: 40px auto 0 auto; width: 560px; height: 12px; border-radius: 6px; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.07); overflow: hidden; position: relative; }
+#bar { width: 2%; height: 100%; border-radius: 6px; background: #3ce6c8; box-shadow: 0 0 14px #3ce6c8; -webkit-transition: width .4s ease; transition: width .4s ease; }
+#shine { position: absolute; top: 0; left: -120px; width: 120px; height: 100%; background: rgba(255,255,255,.25);
+         -webkit-animation: shine 2.2s linear infinite; animation: shine 2.2s linear infinite; }
+@-webkit-keyframes shine { from { left: -120px; } to { left: 580px; } }
+@keyframes shine { from { left: -120px; } to { left: 580px; } }
+#status { margin-top: 14px; font-size: 16px; color: #ebeef5; font-weight: 600; }
+#file { margin-top: 4px; font-size: 13px; color: #6e7686; height: 18px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* tips */
+#tipbox { position: absolute; left: 50%; bottom: 46px; width: 760px; margin-left: -380px; padding: 16px 22px; border-radius: 14px;
+          background: rgba(26,29,40,.92); border: 1px solid rgba(255,255,255,.07); text-align: left; }
+#tiplabel { display: inline-block; padding: 3px 10px; border-radius: 10px; background: rgba(229,140,255,.18); color: #e58cff; font-size: 12px; font-weight: 800; letter-spacing: 1px; }
+#tip { margin-top: 8px; font-size: 17px; color: #ebeef5; -webkit-transition: opacity .5s; transition: opacity .5s; }
+#corner { position: absolute; right: 22px; top: 18px; font-size: 13px; color: #5d6576; }
+</style>
+</head>
+<body>
+<div id="pool1" class="pool"></div>
+<div id="pool2" class="pool"></div>
+<div id="stickers"></div>
+<div id="veil"></div>
+
+<div id="card">
+	<div id="title">Glop Vender</div>
+	<div id="accent"></div>
+	<div id="subtitle">Sandbox &bull; Build &amp; PvP &bull; Unbox, collect, show off</div>
+	<div id="info">
+		<span class="pill">Map <b id="map">...</b></span>
+		<span class="pill">Mode <b id="mode">Sandbox</b></span>
+		<span class="pill">Slots <b id="slots">...</b></span>
+	</div>
+	<div id="barwrap"><div id="bar"></div><div id="shine"></div></div>
+	<div id="status">Connecting...</div>
+	<div id="file"></div>
+</div>
+
+<div id="tipbox">
+	<span id="tiplabel">DID YOU KNOW</span>
+	<div id="tip">Loading...</div>
+</div>
+<div id="corner" id="servername"></div>
+
+<script type="text/javascript">
+/* ================= CONFIG: edit these ================= */
+var CONFIG = {
+	title: "Glop Vender",
+	subtitle: "Sandbox • Build & PvP • Unbox, collect, show off",
+	tipSeconds: 7,
+	tips: [
+		"Press Tab and click anyone's name to see their server profile.",
+		"Earn Pointshop points just by playing. Press F3 to spend them.",
+		"Crates drop knives from Common all the way up to Mythic.",
+		"Type !milestones to see your goals and the rewards they pay.",
+		"Switch to build mode with !build. Nobody can hurt you while you create.",
+		"Customise your kill effect, kill sound, name card and chat colour in your Profile.",
+		"Click a name in chat to send that player a private message.",
+		"Type :smile: or :) in chat for emoji. Try the emoji button too!",
+		"Type !motd any time for the rules, commands and staff list.",
+		"Join our Discord from the button in the Tab menu."
+	]
+};
+/* ====================================================== */
+
+function $(id) { return document.getElementById(id); }
+$("title").innerHTML = CONFIG.title;
+$("subtitle").innerHTML = CONFIG.subtitle.replace("&", "&amp;");
+
+// floating stickers
+(function () {
+	var kinds = ["vend", "crate", "coin", "key", "blade", "vend", "crate", "coin"];
+	var box = $("stickers");
+	for (var i = 0; i < 26; i++) {
+		var el = document.createElement("div");
+		el.className = "st " + kinds[i % kinds.length];
+		var dur = 28 + Math.random() * 30;
+		var size = 0.7 + Math.random() * 0.9;
+		el.style.left = (Math.random() * 100) + "%";
+		el.style.top = (100 + Math.random() * 30) + "%";
+		el.style.zoom = size;
+		el.style.webkitAnimationDuration = dur + "s";
+		el.style.animationDuration = dur + "s";
+		el.style.webkitAnimationDelay = (-Math.random() * dur) + "s";
+		el.style.animationDelay = (-Math.random() * dur) + "s";
+		box.appendChild(el);
+	}
+})();
+
+// rotating tips
+var tipIndex = Math.floor(Math.random() * CONFIG.tips.length);
+function nextTip() {
+	var t = $("tip");
+	t.style.opacity = 0;
+	setTimeout(function () {
+		tipIndex = (tipIndex + 1) % CONFIG.tips.length;
+		t.innerHTML = CONFIG.tips[tipIndex];
+		t.style.opacity = 1;
+	}, 500);
+}
+$("tip").innerHTML = CONFIG.tips[tipIndex];
+setInterval(nextTip, CONFIG.tipSeconds * 1000);
+
+// ---------- Garry's Mod calls these while you load ----------
+var filesTotal = 0, filesNeeded = 0;
+function updateBar() {
+	if (filesTotal > 0) {
+		var p = Math.max(2, Math.min(100, (1 - filesNeeded / filesTotal) * 100));
+		$("bar").style.width = p + "%";
+	}
+}
+function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+	$("map").innerHTML = mapname || "?";
+	$("slots").innerHTML = maxplayers || "?";
+	if (gamemode) $("mode").innerHTML = gamemode.charAt(0).toUpperCase() + gamemode.slice(1);
+	if (servername) $("corner").innerHTML = servername;
+}
+function SetFilesTotal(total) { filesTotal = total; updateBar(); }
+function SetFilesNeeded(needed) { filesNeeded = needed; updateBar(); }
+function DownloadingFile(fileName) {
+	$("file").innerHTML = fileName;
+	$("status").innerHTML = "Downloading content" + (filesTotal > 0 ? " (" + (filesTotal - filesNeeded) + " / " + filesTotal + ")" : "") + "...";
+}
+function SetStatusChanged(status) {
+	$("status").innerHTML = status;
+	if (status.indexOf("Sending client info") >= 0 || status.indexOf("Starting Lua") >= 0) { $("bar").style.width = "100%"; $("file").innerHTML = ""; }
+}
+
+// preview mode (when opened in a normal browser, fake some progress)
+if (navigator.userAgent.indexOf("Valve") < 0 && navigator.userAgent.indexOf("Awesomium") < 0 && window.location.search.indexOf("preview") >= 0) {
+	GameDetails("Glop Vender | Build & PvP", "", "gm_flatgrass", 30, "", "sandbox");
+	SetFilesTotal(120);
+	var n = 120;
+	setInterval(function () { n = n > 0 ? n - 3 : 120; SetFilesNeeded(n); DownloadingFile("materials/pointshop2/crate_rebirth.png"); }, 400);
+}
+</script>
+</body>
+</html>
